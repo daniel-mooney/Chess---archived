@@ -1,3 +1,6 @@
+from typing import Iterable
+
+from numpy import array
 import functions as func
 from colours import bcolours
 
@@ -158,5 +161,5 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
 
     return True
 
-def valid_castle(king_coord: str, side: str, player_number: int ,board):
+def valid_castle(side: str, player_number: int ,board, moves: list):
     pass

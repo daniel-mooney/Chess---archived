@@ -1,5 +1,5 @@
 import numpy as np
-import movement_control as move
+import movement_control as move_ctrl
 from colours import bcolours
 import math
 
@@ -18,7 +18,7 @@ class Chess():
             ['1', 'r', 'n', 'b', 'k', 'q', 'b', 'n', 'r']
         ])
 
-        self.moves = []
+        self.moves = []     # (moved_piece, taken_piece, moved_coord)
     
     def reset_board(self):
         self.board = np.array([
@@ -75,20 +75,27 @@ class Chess():
 
     def move_piece(self, current_cord: str, move_coord: str, player_number: int):
         
-        # Error Checking
         if current_cord == "castle":
+            # Error checking
+            if move_coord.lower() != 'k' or move_coord.lower() != 'q':
+                print(f"Invalid castle command: {move_coord}")
+                return False
+            if not move_ctrl.valid_castle(move_coord, player_number, self.board, self.moves):
+                pass
+            
             return True
+        else:
+            # Error checking
+            if not move_ctrl.check_valid_coords(current_cord):
+                print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {current_cord}" + bcolours.ENDC)
+                return False
 
-        if not move.check_valid_coords(current_cord):
-            print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {current_cord}" + bcolours.ENDC)
-            return False
+            if not move_ctrl.check_valid_coords(move_coord):
+                print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {move_coord}" + bcolours.ENDC)
+                return False
 
-        if not move.check_valid_coords(move_coord):
-            print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {move_coord}" + bcolours.ENDC)
-            return False
-
-        if not move.check_valid_move(current_cord, move_coord, player_number, self.board):
-            return False
+            if not move_ctrl.check_valid_move(current_cord, move_coord, player_number, self.board):
+                return False
         
         # Move piece
         current_cord = current_cord.upper()
