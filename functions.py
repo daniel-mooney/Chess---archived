@@ -183,11 +183,20 @@ def num_coord_to_index(num_coord: int):
 
     return (row, column)
 
-def create_check_map(board :iter):
+def create_check_map(board: iter):
     # Creates a check map of the board for both players.
     # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
-    
-    piece_checking = {
+
+    # Iterate through board
+    for row in range(1, 9):
+        for column in range(1, 9):
+            if board[row][column] != '0' and board[row][column].lower() != 'n':
+                pass
+                
+
+def set_check_lines(board: iter, piece_row: int, piece_col: int):
+    # Sets the check lines for a given piece
+    piece_range = {
         'k' : [1, 9, 10, 11],   # King
         'q': [1, 9, 10 ,11],    # Queen
         'r': [1, 10],           # Rook
@@ -196,9 +205,5 @@ def create_check_map(board :iter):
         'p': [9, 11]            # Pawn
     }
 
-    # Iterate through board
-    for row in range(1, 9):
-        for column in range(1, 9):
-            if board[row][column] != '0' and board[row][column].lower() != 'n':
-                piece = board[row][column]
-                
+
+    return board
