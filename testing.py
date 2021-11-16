@@ -1,5 +1,6 @@
 from chess import Chess
 import numpy as np
+import coordinate_conversions as convert
 
 
 board_1 = np.array([
@@ -37,3 +38,6 @@ board_3 = np.array([
             ['2', '0', '0', '0', 'q', '0', '0', '0', '0'],
             ['1', '0', '0', '0', '0', '0', '0', '0', '0']
         ])
+
+
+print(convert.grid_coord_to_num_coord("h8"))

@@ -29,3 +29,6 @@ def num_coord_to_index(num_coord: int):
     column = num_coord % 10
 
     return (row, column)
+
+def index_to_num_coord(row: int, column: int):
+    pass
