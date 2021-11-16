@@ -16,7 +16,7 @@ def check_valid_coords(coord: str):
 
     return True
 
-def check_valid_move(current_coord: str, move_coord: str, player_number: int, board):
+def check_valid_move(current_coord: str, move_coord: str, player_number: int, board: iter):
 
     current_row, current_col = convert.grid_coord_to_index(current_coord)
     move_row, move_col = convert.grid_coord_to_index(move_coord)
@@ -111,7 +111,7 @@ def valid_pawn_move(current_num: int, move_num: int, target_square: str, player_
     
     return True
 
-def check_valid_movement(current_coord: str, move_coord: str, player_number: int, board):
+def check_valid_movement(current_coord: str, move_coord: str, player_number: int, board: iter):
     
     current_num = convert.grid_coord_to_num_coord(current_coord)
     move_num = convert.grid_coord_to_num_coord(move_coord)
@@ -158,7 +158,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
 
     return True
 
-def valid_castle(side: str, player_number: int ,board, moves: list):
+def valid_castle(side: str, player_number: int ,board: iter, moves: list):
     pass
 
 def create_check_map(board: iter):
@@ -182,6 +182,19 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
         'n': [8, 12, 19, 21],   # Knight
         'p': [9, 11]            # Pawn
     }
+
+    starting_num = convert.index_to_num_coord(piece_row, piece_col)
+    piece = board[piece_row][piece_col]
+    player_number = '1' if piece.islower() else '2'
+
+    if piece.lower() == 'k' or piece.lower() == 'p' or piece.lower() == "n":
+        for n in piece_range[piece.lower()]:
+            if (starting_num + n) < 89 and (starting_num + n) %10 not in [0, 9]:
+                row, col = convert.num_coord_to_index(starting_num + n)
+                board[row][col] = player_number if board[row][col] == '0' else 'X'
+            if (starting_num - n) > 10 and (starting_num - n) %10 not in [0, 9]:
+                row, col = convert.num_coord_to_index(starting_num - n)
+                board[row][col] = player_number
 
 
     return board

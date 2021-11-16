@@ -40,3 +40,15 @@ def index_to_num_coord(row: int, column: int):
     row_num = [80, 70, 60, 50, 40, 30, 20, 10]
 
     return row_num[row - 1] + column
+
+def valid_num_coord(coord: int):
+    """
+    Returns True if argument is a valid num_coord, else False.
+    """
+    if coord %10 in [0, 9]:
+        return False
+    if coord > 88:
+        return False
+    if coord < 11:
+        return False
+    return True
