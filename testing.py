@@ -40,4 +40,6 @@ board_3 = np.array([
         ])
 
 
-print(convert.index_to_num_coord(8, 1))
+x = '5'
+
+print(x.isalpha())

@@ -175,7 +175,7 @@ def create_check_map(board: iter):
 def set_check_lines(board: iter, piece_row: int, piece_col: int):
     # Sets the check lines for a given piece
     piece_range = {
-        'k' : [1, 9, 10, 11],   # King
+        'k': [1, 9, 10, 11],   # King
         'q': [1, 9, 10 ,11],    # Queen
         'r': [1, 10],           # Rook
         'b': [9, 11],           # Bishop
@@ -189,12 +189,41 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
 
     if piece.lower() == 'k' or piece.lower() == 'p' or piece.lower() == "n":
         for n in piece_range[piece.lower()]:
-            if (starting_num + n) < 89 and (starting_num + n) %10 not in [0, 9]:
+            # Add movement num
+            if convert.valid_num_coord(starting_num + n):
                 row, col = convert.num_coord_to_index(starting_num + n)
-                board[row][col] = player_number if board[row][col] == '0' else 'X'
-            if (starting_num - n) > 10 and (starting_num - n) %10 not in [0, 9]:
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+            
+            # Subtract movement num
+            if convert.valid_num_coord(starting_num - n):
                 row, col = convert.num_coord_to_index(starting_num - n)
-                board[row][col] = player_number
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+    else:
+        for n in piece_range[piece.lower()]:
+            # Add movement num
+            current_num = starting_num + n
 
+            while convert.valid_num_coord(current_num):
+                row, col = convert.num_coord_to_index(current_num)
 
+                if board[row][col].isalpha():
+                    break
+                else:
+                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    current_num = current_num + n
+            
+            # Subtract movement num
+            current_num = starting_num - n
+
+            while convert.valid_num_coord(current_num - n):
+                current_num = current_num - n
+                row, col = convert.num_coord_to_index(current_num)
+
+                if board[row][col].isalpha():
+                    break
+                else:
+                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    current_num = current_num - n
     return board
