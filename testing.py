@@ -1,4 +1,6 @@
+from chess import Chess
 import numpy as np
+
 
 board_1 = np.array([
             ["-", "A", "B", "C", "D", "E", "F", "G", "H"],

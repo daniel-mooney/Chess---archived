@@ -1,4 +1,4 @@
-from functions import Chess
+from chess import Chess
 
 game = Chess()
 

@@ -1,8 +1,5 @@
-from typing import Iterable
-
-from numpy import array
-import functions as func
 from colours import bcolours
+import coordinate_conversions as convert
 
 
 def check_valid_coords(coord: str):
@@ -21,11 +18,11 @@ def check_valid_coords(coord: str):
 
 def check_valid_move(current_coord: str, move_coord: str, player_number: int, board):
 
-    current_row, current_col = func.grid_coord_to_index(current_coord)
-    move_row, move_col = func.grid_coord_to_index(move_coord)
+    current_row, current_col = convert.grid_coord_to_index(current_coord)
+    move_row, move_col = convert.grid_coord_to_index(move_coord)
 
-    current_num = func.grid_coord_to_num_coord(current_coord)
-    move_num = func.grid_coord_to_num_coord(move_coord)
+    current_num = convert.grid_coord_to_num_coord(current_coord)
+    move_num = convert.grid_coord_to_num_coord(move_coord)
 
     piece_bool = True if player_number == 1 else False
 
@@ -116,10 +113,10 @@ def valid_pawn_move(current_num: int, move_num: int, target_square: str, player_
 
 def check_valid_movement(current_coord: str, move_coord: str, player_number: int, board):
     
-    current_num = func.grid_coord_to_num_coord(current_coord)
-    move_num = func.grid_coord_to_num_coord(move_coord)
+    current_num = convert.grid_coord_to_num_coord(current_coord)
+    move_num = convert.grid_coord_to_num_coord(move_coord)
     square_difference = current_num - move_num
-    start_row, start_column = func.grid_coord_to_index(current_coord)
+    start_row, start_column = convert.grid_coord_to_index(current_coord)
     piece_type = (board[start_row][start_column]).upper()
 
     divisors = [9, 10, 11]
@@ -133,7 +130,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
         current_num -= lowest_divisor
 
         while current_num > move_num:
-            row, column = func.num_coord_to_index(current_num)
+            row, column = convert.num_coord_to_index(current_num)
 
             if board[row][column] != '0':
                 return False
@@ -144,7 +141,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
         current_num += lowest_divisor
 
         while current_num < move_num:
-            row, column = func.num_coord_to_index(current_num)
+            row, column = convert.num_coord_to_index(current_num)
 
             if board[row][column] != '0':
                 return False
@@ -152,7 +149,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
             current_num += lowest_divisor
 
     # Check if valid ending square
-    end_row, end_column = func.grid_coord_to_index(move_coord)
+    end_row, end_column = convert.grid_coord_to_index(move_coord)
     
     if player_number == 1 and (board[end_row][end_column]).islower():
         return False
@@ -163,3 +160,28 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
 
 def valid_castle(side: str, player_number: int ,board, moves: list):
     pass
+
+def create_check_map(board: iter):
+    # Creates a check map of the board for both players.
+    # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
+
+    # Iterate through board
+    for row in range(1, 9):
+        for column in range(1, 9):
+            if board[row][column] != '0' and board[row][column].lower() != 'n':
+                pass
+                
+
+def set_check_lines(board: iter, piece_row: int, piece_col: int):
+    # Sets the check lines for a given piece
+    piece_range = {
+        'k' : [1, 9, 10, 11],   # King
+        'q': [1, 9, 10 ,11],    # Queen
+        'r': [1, 10],           # Rook
+        'b': [9, 11],           # Bishop
+        'n': [8, 12, 19, 21],   # Knight
+        'p': [9, 11]            # Pawn
+    }
+
+
+    return board

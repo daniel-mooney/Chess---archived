@@ -1,7 +1,8 @@
 import numpy as np
-import movement_control as move_ctrl
 from colours import bcolours
 import math
+import movement_control as move_ctrl
+import coordinate_conversions as convert
 
 class Chess():
     def __init__(self):
@@ -101,8 +102,8 @@ class Chess():
         current_cord = current_cord.upper()
         move_coord = move_coord.upper()
 
-        current_row, current_col = grid_coord_to_index(current_cord)
-        move_row, move_col = grid_coord_to_index(move_coord)
+        current_row, current_col = convert.grid_coord_to_index(current_cord)
+        move_row, move_col = convert.grid_coord_to_index(move_coord)
 
         move_info = (self.board[current_row][current_col], self.board[move_row][move_col], move_coord)
         self.moves.append(move_info)
@@ -148,62 +149,3 @@ class Chess():
                     print(f"\nPlayer {player_number} please try again...")
         
             player_number = 2 if player_number == 1 else 1
-
-
-
-def grid_coord_to_num_coord(coord: str):
-    """
-    Converts a grid co-ordinate into a numeric co-ordinate used to control movement
-    """
-    coord = coord.upper()
-
-    column = ord(coord[0]) - 64
-    row = int(coord[1])
-
-    return (row * 10) + column
-
-def grid_coord_to_index(coord: str):
-    """
-    Returns a tuple `(row, column)` for a given coordinate in the board matrix
-    """
-    row_index = [8 ,7, 6, 5, 4, 3, 2, 1]
-    coord = coord.upper()
-
-    row = row_index[int(coord[1]) - 1]
-    column = ord(coord[0]) - 64
-
-    return (row, column)
-
-def num_coord_to_index(num_coord: int):
-    
-    row_index = [8 ,7, 6, 5, 4, 3, 2, 1]
-
-    row = row_index[(num_coord // 10) - 1]
-    column = num_coord % 10
-
-    return (row, column)
-
-def create_check_map(board: iter):
-    # Creates a check map of the board for both players.
-    # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
-
-    # Iterate through board
-    for row in range(1, 9):
-        for column in range(1, 9):
-            if board[row][column] != '0' and board[row][column].lower() != 'n':
-                pass
-                
-
-def set_check_lines(board: iter, piece_row: int, piece_col: int):
-    # Sets the check lines for a given piece
-    piece_range = {
-        'k' : [1, 9, 10, 11],   # King
-        'q': [1, 9, 10 ,11],    # Queen
-        'r': [1, 10],           # Rook
-        'b': [9, 11],           # Bishop
-        'n': [8, 12, 19, 21],   # Knight
-        'p': [9, 11]            # Pawn
-    }
-
-
-    return board
