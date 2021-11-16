@@ -162,7 +162,7 @@ def valid_castle(side: str, player_number: int ,board: iter, moves: list):
     """
     Checks whether a castle command is valid
     """
-    row, col = 8, 5 if player_number == 1 else 1, 5
+    row, col = (8, 5) if player_number == 1 else (1, 5)
 
     # Check if king has been previously moved
     player_king = 'k' if player_number == 1 else 'K'
@@ -172,22 +172,31 @@ def valid_castle(side: str, player_number: int ,board: iter, moves: list):
             return False
     
     # Check if corresponding rook has been moved
+    if player_number == 1:
+        for move in moves:
+            if side == 'Q' and 'A1' in move:
+                return False
+            elif side == 'K' and 'H1' in move:
+                return False
+    elif player_number == 2:
+        for move in moves:
+            if side == 'Q' and 'A8' in move:
+                return False
+            elif side == 'K' and 'H8' in move:
+                return False
     
-    
-    # Check for blocking pieces
+    # Check for blocking pieces or checks
+    check_map = create_check_map(board)
+    valid_sqaures = ['0', str(player_number)]
+
     if side.upper() == 'K':
         for i in range(1, 3):
-            if board[row][col + i] != '0':
+            if check_map[row][col + i] not in valid_sqaures:
                 return False
     elif side.upper() == 'Q':
         for i in range(1, 4):
-            if board[row][col - i] != '0':
+            if check_map[row][col - i] not in valid_sqaures:
                 return False
-
-    # Check for blocking checks
-    check_map = create_check_map(board)
-
-
 
     return True
 
