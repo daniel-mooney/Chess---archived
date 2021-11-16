@@ -22,6 +22,9 @@ def grid_coord_to_index(coord: str):
     return (row, column)
 
 def num_coord_to_index(num_coord: int):
+    """
+    Converts a num_coord to the corresponding row and column matrix coordinates.
+    """
     
     row_index = [8 ,7, 6, 5, 4, 3, 2, 1]
 
@@ -31,4 +34,9 @@ def num_coord_to_index(num_coord: int):
     return (row, column)
 
 def index_to_num_coord(row: int, column: int):
-    pass
+    """
+    Converts a row, column pair into the corresponding num_coord used for movement control.
+    """
+    row_num = [80, 70, 60, 50, 40, 30, 20, 10]
+
+    return row_num[row - 1] + column

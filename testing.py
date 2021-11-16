@@ -40,4 +40,4 @@ board_3 = np.array([
         ])
 
 
-print(convert.grid_coord_to_num_coord("h8"))
+print(convert.index_to_num_coord(8, 1))
