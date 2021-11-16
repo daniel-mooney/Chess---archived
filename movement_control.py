@@ -194,13 +194,13 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
             if convert.valid_num_coord(starting_num + n):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
-                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
             
             # Subtract movement num
             if convert.valid_num_coord(starting_num - n):
                 row, col = convert.num_coord_to_index(starting_num - n)
                 if not board[row][col].isalpha():
-                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
     elif piece.lower() == 'p':
         sign = 1 if piece.islower() else -1
 
@@ -210,7 +210,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
             if convert.valid_num_coord(starting_num + n):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
-                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
 
     elif piece.lower() in piece_range.keys():
         for n in piece_range[piece.lower()]:
@@ -223,7 +223,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 if board[row][col].isalpha():
                     break
                 else:
-                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
                     current_num = current_num + n
             
             # Subtract movement num
@@ -235,6 +235,6 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 if board[row][col].isalpha():
                     break
                 else:
-                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
                     current_num = current_num - n
     return board
