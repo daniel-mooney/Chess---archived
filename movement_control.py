@@ -159,24 +159,60 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
     return True
 
 def valid_castle(side: str, player_number: int ,board: iter, moves: list):
-    pass
+    """
+    Checks whether a castle command is valid
+    """
+    row, col = 8, 5 if player_number == 1 else 1, 5
+
+    # Check if king has been previously moved
+    player_king = 'k' if player_number == 1 else 'K'
+
+    for move in moves:
+        if player_king in move:
+            return False
+    
+    # Check if corresponding rook has been moved
+    
+    
+    # Check for blocking pieces
+    if side.upper() == 'K':
+        for i in range(1, 3):
+            if board[row][col + i] != '0':
+                return False
+    elif side.upper() == 'Q':
+        for i in range(1, 4):
+            if board[row][col - i] != '0':
+                return False
+
+    # Check for blocking checks
+    check_map = create_check_map(board)
+
+
+
+    return True
+
 
 def create_check_map(board: iter):
-    # Creates a check map of the board for both players.
+    """
+    Creates a check map of the entire board, used to determine whether a kind is in check, a castle command
+    is valid or if the king is in mate.
+    """
     # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
 
     # Iterate through board
     for row in range(1, 9):
         for column in range(1, 9):
-            if board[row][column] != '0':
+            if board[row][column].isalpha():
                 board = set_check_lines(board, row, column)
     return board
                 
 
 def set_check_lines(board: iter, piece_row: int, piece_col: int):
-    # Sets the check lines for a given piece
+    """
+    Sets the checklines (line of attack) of a piece in a particular row and column of a chess board.
+    """
     piece_range = {
-        'k': [1, 9, 10, 11],   # King
+        'k': [1, 9, 10, 11],    # King
         'q': [1, 9, 10 ,11],    # Queen
         'r': [1, 10],           # Rook
         'b': [9, 11],           # Bishop
@@ -211,7 +247,6 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
-
     elif piece.lower() in piece_range.keys():
         for n in piece_range[piece.lower()]:
             # Add movement num

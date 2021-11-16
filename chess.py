@@ -19,7 +19,7 @@ class Chess():
             ['1', 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
         ])
 
-        self.moves = []     # (moved_piece, taken_piece, moved_coord)
+        self.moves = []     # (moved_piece, taken_piece, current_coord, moved_coord)
     
     def reset_board(self):
         self.board = np.array([
@@ -47,8 +47,9 @@ class Chess():
         print("Enter the square you wish to move that piece to.", end="\n\n")
         print("Other Commands:")
         print(bcolours.BOLD + "CASTLE" + bcolours.ENDC + " - when you wish to castle your king.")
-        print(bcolours.BOLD + "PRINT" + bcolours.ENDC + " - prints a list of all previous moves.")
-        print(bcolours.BOLD + "GUIDE" + bcolours.ENDC + " - prints the control guide to terminal")
+        print(bcolours.BOLD + "MOVES" + bcolours.ENDC + " - prints a list of all previous moves.")
+        print(bcolours.BOLD + "PRINT" + bcolours.ENDC + " - prints the current board to terminal.")
+        print(bcolours.BOLD + "GUIDE" + bcolours.ENDC + " - prints the control guide to terminal.")
         print()
 
     def print_moves(self):
@@ -57,15 +58,15 @@ class Chess():
             print("Moves played:", end="\n\n")
 
             for i in range( math.ceil(len(self.moves) / 2)):
-                if self.moves[2*i][2] != '0':
+                if self.moves[2*i][3] != '0':
                     piece = self.moves[2*i][0]
-                    move_coord = self.moves[2*i][2]
+                    move_coord = self.moves[2*i][3]
 
                     print(f"{i+1}. {piece} - {move_coord}", end='')
 
                 if (2*i + 1) < len(self.moves):
                     piece = self.moves[2*i + 1][0]
-                    move_coord = self.moves[2*i + 1][2]
+                    move_coord = self.moves[2*i + 1][3]
 
                     print(f", {piece} - {move_coord}")
                 else:
@@ -105,7 +106,7 @@ class Chess():
         current_row, current_col = convert.grid_coord_to_index(current_cord)
         move_row, move_col = convert.grid_coord_to_index(move_coord)
 
-        move_info = (self.board[current_row][current_col], self.board[move_row][move_col], move_coord)
+        move_info = (self.board[current_row][current_col], self.board[move_row][move_col], current_cord, move_coord)
         self.moves.append(move_info)
 
         self.board[move_row][move_col] = self.board[current_row][current_col]
@@ -130,12 +131,16 @@ class Chess():
                 current_coord = input("Choose a piece to move: ")
                 current_coord = current_coord.lower()
 
-                if current_coord == "print":
+                if current_coord == "moves":
                     self.print_moves()
                     continue
 
                 if current_coord == "guide":
                     self.print_control_guide()
+                    continue
+
+                if current_coord == "print":
+                    print(self.board)
                     continue
 
                 if current_coord == "castle":
