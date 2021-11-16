@@ -1,6 +1,7 @@
 from chess import Chess
 import numpy as np
 import coordinate_conversions as convert
+import movement_control as move_ctrl
 
 
 board_1 = np.array([
@@ -39,7 +40,19 @@ board_3 = np.array([
             ['1', '0', '0', '0', '0', '0', '0', '0', '0']
         ])
 
+board_4 = np.array([
+            ["-", "A", "B", "C", "D", "E", "F", "G", "H"],
+            ['8', '0', '0', '0', '0', '0', '0', '0', 'q'],
+            ['7', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['6', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['5', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['4', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['3', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['2', '0', '0', '0', '0', '0', '0', '0', '0'],
+            ['1', 'Q', '0', '0', '0', '0', '0', '0', '0']
+        ])
 
-x = '5'
 
-print(x.isalpha())
+check_map = move_ctrl.create_check_map(board_4)
+
+print(check_map)

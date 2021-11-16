@@ -168,8 +168,9 @@ def create_check_map(board: iter):
     # Iterate through board
     for row in range(1, 9):
         for column in range(1, 9):
-            if board[row][column] != '0' and board[row][column].lower() != 'n':
-                pass
+            if board[row][column] != '0':
+                board = set_check_lines(board, row, column)
+    return board
                 
 
 def set_check_lines(board: iter, piece_row: int, piece_col: int):
@@ -187,7 +188,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
     piece = board[piece_row][piece_col]
     player_number = '1' if piece.islower() else '2'
 
-    if piece.lower() == 'k' or piece.lower() == 'p' or piece.lower() == "n":
+    if piece.lower() == 'k' or piece.lower() == 'n':
         for n in piece_range[piece.lower()]:
             # Add movement num
             if convert.valid_num_coord(starting_num + n):
@@ -200,7 +201,18 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num - n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' else 'X'
-    else:
+    elif piece.lower() == 'p':
+        sign = 1 if piece.islower() else -1
+
+        for n in piece_range[piece.lower()]:
+            # Add movement num
+            n = n * sign
+            if convert.valid_num_coord(starting_num + n):
+                row, col = convert.num_coord_to_index(starting_num + n)
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' else 'X'
+
+    elif piece.lower() in piece_range.keys():
         for n in piece_range[piece.lower()]:
             # Add movement num
             current_num = starting_num + n
@@ -217,8 +229,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
             # Subtract movement num
             current_num = starting_num - n
 
-            while convert.valid_num_coord(current_num - n):
-                current_num = current_num - n
+            while convert.valid_num_coord(current_num):
                 row, col = convert.num_coord_to_index(current_num)
 
                 if board[row][col].isalpha():
