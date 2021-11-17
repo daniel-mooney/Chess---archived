@@ -57,18 +57,25 @@ class Chess():
         if len(self.moves) > 0:
             print("Moves played:", end="\n\n")
 
-            for i in range( math.ceil(len(self.moves) / 2)):
-                if self.moves[2*i][3] != '0':
-                    piece = self.moves[2*i][0]
-                    move_coord = self.moves[2*i][3]
+            for i in range( math.ceil(len(self.moves) / 2) ):
+                piece = self.moves[2*i][0]
+                move_coord = self.moves[2*i][3]
 
+                if self.moves[2*i][1] == '0':
                     print(f"{i+1}. {piece} - {move_coord}", end='')
+                else:
+                    print(f"{i+1}. {piece} - x{move_coord}", end='')
+
 
                 if (2*i + 1) < len(self.moves):
                     piece = self.moves[2*i + 1][0]
                     move_coord = self.moves[2*i + 1][3]
+                    
+                    if self.moves[2*i + 1][1] == '0':
+                        print(f", {piece} - {move_coord}")
+                    else:
+                        print(f", {piece} - x{move_coord}")
 
-                    print(f", {piece} - {move_coord}")
                 else:
                     print()
             print()
@@ -83,8 +90,9 @@ class Chess():
                 print(f"Invalid castle command: {move_coord}")
                 return False
             if not move_ctrl.valid_castle(move_coord, player_number, self.board, self.moves):
-                pass
-            
+                print("Invalid Castle move.")
+                return False
+                
             return True
         else:
             # Error checking

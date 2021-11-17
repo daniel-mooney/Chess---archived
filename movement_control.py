@@ -233,6 +233,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
     piece = board[piece_row][piece_col]
     player_number = '1' if piece.islower() else '2'
 
+    # King or Knight
     if piece.lower() == 'k' or piece.lower() == 'n':
         for n in piece_range[piece.lower()]:
             # Add movement num
@@ -246,6 +247,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num - n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+    # Pawn
     elif piece.lower() == 'p':
         sign = 1 if piece.islower() else -1
 
@@ -256,6 +258,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+    # All other pieces
     elif piece.lower() in piece_range.keys():
         for n in piece_range[piece.lower()]:
             # Add movement num
