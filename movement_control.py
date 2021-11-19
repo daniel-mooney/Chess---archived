@@ -232,6 +232,7 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
     starting_num = convert.index_to_num_coord(piece_row, piece_col)
     piece = board[piece_row][piece_col]
     player_number = '1' if piece.islower() else '2'
+    opposite_king = 'K' if player_number == '1' else 'k'
 
     # King or Knight
     if piece.lower() == 'k' or piece.lower() == 'n':
@@ -241,12 +242,16 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
             
             # Subtract movement num
             if convert.valid_num_coord(starting_num - n):
                 row, col = convert.num_coord_to_index(starting_num - n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
     # Pawn
     elif piece.lower() == 'p':
         sign = 1 if piece.islower() else -1
@@ -258,6 +263,8 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(starting_num + n)
                 if not board[row][col].isalpha():
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
     # All other pieces
     elif piece.lower() in piece_range.keys():
         for n in piece_range[piece.lower()]:
@@ -268,6 +275,8 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(current_num)
 
                 if board[row][col].isalpha():
+                    if board[row][col] == opposite_king:
+                        board[row][col] = 'C'
                     break
                 else:
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
@@ -280,6 +289,8 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 row, col = convert.num_coord_to_index(current_num)
 
                 if board[row][col].isalpha():
+                    if board[row][col] == opposite_king:
+                        board[row][col] = 'C'
                     break
                 else:
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
