@@ -92,6 +92,25 @@ class Chess():
             if not move_ctrl.valid_castle(move_coord, player_number, self.board, self.moves):
                 print("Invalid Castle move.")
                 return False
+            # Castle
+            col = 5
+            rook_col = 1 if move_coord.upper() == 'Q' else 8
+            king_row = 8 if player_number == 1 else 1
+
+            # Queen side
+            if move_coord.upper() == 'Q':
+                self.board[king_row][col - 2] = self.board[king_row][col]   # Move King
+                self.board[king_row][col - 2] = '0'
+
+                self.board[king_row][rook_col + 3] = self.board[king_row][rook_col]     # Move Rook
+                self.board[king_row][rook_col] = '0'
+            # King side
+            elif move_coord.upper() == 'K':
+                self.board[king_row][col + 2] = self.board[king_row][col]   # Move King
+                self.board[king_row][col + 2] = '0'
+
+                self.board[king_row][rook_col -2] = self.board[king_row][rook_col]     # Move Rook
+                self.board[king_row][rook_col] = '0'
                 
             return True
         else:
