@@ -63,5 +63,3 @@ board_5 = np.array([
             ['2', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
             ['1', 'r', 'n', 'b', 'q', 'k', '0', '0', 'r']
         ])
-
-print(move_ctrl.create_check_map(board_4))

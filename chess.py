@@ -86,8 +86,9 @@ class Chess():
         
         if current_cord == "castle":
             # Error checking
-            if move_coord.lower() != 'k' or move_coord.lower() != 'q':
+            if move_coord.lower() != 'k' and move_coord.lower() != 'q':
                 print(f"Invalid castle command: {move_coord}")
+                print(move_coord)
                 return False
             if not move_ctrl.valid_castle(move_coord, player_number, self.board, self.moves):
                 print("Invalid Castle move.")
@@ -100,14 +101,14 @@ class Chess():
             # Queen side
             if move_coord.upper() == 'Q':
                 self.board[king_row][col - 2] = self.board[king_row][col]   # Move King
-                self.board[king_row][col - 2] = '0'
+                self.board[king_row][col] = '0'
 
                 self.board[king_row][rook_col + 3] = self.board[king_row][rook_col]     # Move Rook
                 self.board[king_row][rook_col] = '0'
             # King side
             elif move_coord.upper() == 'K':
                 self.board[king_row][col + 2] = self.board[king_row][col]   # Move King
-                self.board[king_row][col + 2] = '0'
+                self.board[king_row][col] = '0'
 
                 self.board[king_row][rook_col -2] = self.board[king_row][rook_col]     # Move Rook
                 self.board[king_row][rook_col] = '0'

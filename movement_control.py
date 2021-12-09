@@ -207,7 +207,7 @@ def create_check_map(board: iter):
     is valid or if the king is in mate.
     """
     # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
-
+    
     # Iterate through board
     for row in range(1, 9):
         for column in range(1, 9):
