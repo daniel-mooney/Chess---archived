@@ -186,13 +186,114 @@ def valid_castle(side: str, player_number: int ,board: iter, moves: list):
             elif side == 'K' and 'H8' in move:
                 return False
 
-    create_check_map(board)
+ # Check for blocking pieces or checks
+    check_map = create_check_map(board)
+    valid_sqaures = ['0', str(player_number)]
+
+    if side.upper() == 'K':
+        for i in range(1, 3):
+            if check_map[row][col + i] not in valid_sqaures:
+                return False
+    elif side.upper() == 'Q':
+        for i in range(1, 4):
+            if check_map[row][col - i] not in valid_sqaures:
+                return False
+
     return True
 
-def create_check_map(board: iter):
-    check_map = np.copy(board)
 
-    for column in range(1, 9):
-        for row in range(1, 9):
-            check_map[row][column] = 'X'
-    return check_map
+def create_check_map(game_board: iter):
+    """
+    Creates a check map of the entire board, used to determine whether a kind is in check, a castle command
+    is valid or if the king is in mate.
+    """
+    # key = {1 = player one check, 2 = player two check, X = both check, 0 = no check}
+    board = np.copy(game_board)
+    # Iterate through board
+    for row in range(1, 9):
+        for column in range(1, 9):
+            if board[row][column].isalpha():
+                board = set_check_lines(board, row, column)
+    return board
+
+
+def set_check_lines(board: iter, piece_row: int, piece_col: int):
+    """
+    Sets the checklines (line of attack) of a piece in a particular row and column of a chess board.
+    """
+    piece_range = {
+        'k': [1, 9, 10, 11],    # King
+        'q': [1, 9, 10 ,11],    # Queen
+        'r': [1, 10],           # Rook
+        'b': [9, 11],           # Bishop
+        'n': [8, 12, 19, 21],   # Knight
+        'p': [9, 11]            # Pawn
+    }
+
+    starting_num = convert.index_to_num_coord(piece_row, piece_col)
+    piece = board[piece_row][piece_col]
+    player_number = '1' if piece.islower() else '2'
+    opposite_king = 'K' if player_number == '1' else 'k'
+
+    # King or Knight
+    if piece.lower() == 'k' or piece.lower() == 'n':
+        for n in piece_range[piece.lower()]:
+            # Add movement num
+            if convert.valid_num_coord(starting_num + n):
+                row, col = convert.num_coord_to_index(starting_num + n)
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
+
+            # Subtract movement num
+            if convert.valid_num_coord(starting_num - n):
+                row, col = convert.num_coord_to_index(starting_num - n)
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
+    # Pawn
+    elif piece.lower() == 'p':
+        sign = 1 if piece.islower() else -1
+
+        for n in piece_range[piece.lower()]:
+            # Add movement num
+            n = n * sign
+            if convert.valid_num_coord(starting_num + n):
+                row, col = convert.num_coord_to_index(starting_num + n)
+                if not board[row][col].isalpha():
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                if board[row][col] == opposite_king:
+                    board[row][col] = 'C'
+    # All other pieces
+    elif piece.lower() in piece_range.keys():
+        for n in piece_range[piece.lower()]:
+            # Add movement num
+            current_num = starting_num + n
+
+            while convert.valid_num_coord(current_num):
+                row, col = convert.num_coord_to_index(current_num)
+
+                if board[row][col].isalpha():
+                    if board[row][col] == opposite_king:
+                        board[row][col] = 'C'
+                    break
+                else:
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                    current_num = current_num + n
+
+            # Subtract movement num
+            current_num = starting_num - n
+
+            while convert.valid_num_coord(current_num):
+                row, col = convert.num_coord_to_index(current_num)
+
+                if board[row][col].isalpha():
+                    if board[row][col] == opposite_king:
+                        board[row][col] = 'C'
+                    break
+                else:
+                    board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
+                    current_num = current_num - n
+    return board 
