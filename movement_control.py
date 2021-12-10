@@ -1,5 +1,6 @@
 from colours import bcolours
 import coordinate_conversions as convert
+import numpy as np
 
 
 def check_valid_coords(coord: str):
@@ -184,7 +185,14 @@ def valid_castle(side: str, player_number: int ,board: iter, moves: list):
                 return False
             elif side == 'K' and 'H8' in move:
                 return False
+
+    create_check_map(board)
     return True
 
 def create_check_map(board: iter):
-    pass
+    check_map = np.copy(board)
+
+    for column in range(1, 9):
+        for row in range(1, 9):
+            check_map[row][column] = 'X'
+    return check_map
