@@ -110,7 +110,7 @@ class Chess():
                 self.board[king_row][col + 2] = self.board[king_row][col]   # Move King
                 self.board[king_row][col] = '0'
 
-                self.board[king_row][rook_col -2] = self.board[king_row][rook_col]     # Move Rook
+                self.board[king_row][rook_col - 2] = self.board[king_row][rook_col]     # Move Rook
                 self.board[king_row][rook_col] = '0'
                 
             return True
