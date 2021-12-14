@@ -186,7 +186,7 @@ def valid_castle(side: str, player_number: int ,board: iter, moves: list):
             elif side == 'K' and 'H8' in move:
                 return False
 
- # Check for blocking pieces or checks
+    # Check for blocking pieces or checks
     check_map = create_check_map(board)
     valid_sqaures = ['0', str(player_number)]
 
@@ -296,4 +296,16 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
                 else:
                     board[row][col] = player_number if board[row][col] == '0' or board[row][col] == player_number else 'X'
                     current_num = current_num - n
-    return board 
+    return board
+
+def check_pin(current_coord: str, move_coord: str, player_number: int, board: iter):
+    curr_row, curr_col = convert.grid_coord_to_index(current_coord)
+    move_row, move_col = convert.grid_coord_to_index(move_coord)
+    board_copy = np.copy(board)
+
+    king = 'k' if player_number == 1 else 'K'
+    king_coord = np.argwhere(board == king)
+    row = king_coord[0]
+    col = king_coord[1]
+
+    
