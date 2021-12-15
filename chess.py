@@ -119,12 +119,13 @@ class Chess():
             if not move_ctrl.check_valid_coords(current_cord):
                 print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {current_cord}" + bcolours.ENDC)
                 return False
-
             if not move_ctrl.check_valid_coords(move_coord):
                 print(bcolours.FAIL + f"Error: Invalid co-ordinate input: {move_coord}" + bcolours.ENDC)
                 return False
-
             if not move_ctrl.check_valid_move(current_cord, move_coord, player_number, self.board):
+                return False
+            if not move_ctrl.check_pin(current_cord, move_coord, player_number, self.board):
+                print(bcolours.FAIL + "Cannot move a pinned piece" + bcolours.ENDC)
                 return False
         
         # Move piece

@@ -127,7 +127,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
     
     # Iterate through direction of movement
     if square_difference > 0 and piece_type != 'N':
-        lowest_divisor = min([d for d in divisors if square_difference % d == 0])
+        lowest_divisor = 1 if square_difference < 8 else min([d for d in divisors if square_difference % d == 0])
         current_num -= lowest_divisor
 
         while current_num > move_num:
@@ -138,7 +138,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
             
             current_num -= lowest_divisor
     elif piece_type != 'N':
-        lowest_divisor = min([d for d in divisors if square_difference % d == 0])
+        lowest_divisor = 1 if square_difference > -8 else min([d for d in divisors if square_difference % d == 0])
         current_num += lowest_divisor
 
         while current_num < move_num:
@@ -304,8 +304,14 @@ def check_pin(current_coord: str, move_coord: str, player_number: int, board: it
     board_copy = np.copy(board)
 
     king = 'k' if player_number == 1 else 'K'
-    king_coord = np.argwhere(board == king)
-    row = king_coord[0]
-    col = king_coord[1]
+    king_row, king_col = tuple(*np.argwhere(board == king))
 
-    
+    # Move piece
+    board_copy[move_row][move_col] = board_copy[curr_row][curr_col]
+    board_copy[curr_row][curr_col] = '0'
+
+    check_map = create_check_map(board_copy)
+
+    if check_map[king_row][king_col] == 'C':
+        return False
+    return True
