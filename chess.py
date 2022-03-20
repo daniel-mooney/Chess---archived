@@ -37,6 +37,10 @@ class Chess():
         print("The board has been reset")
     
     def print_control_guide(self):
+        """
+        Prints the control guide to the display terminal. Takes no arguemnts.
+        """
+
         key = 'Key: R - Rook, N - Knight, B - Bishop, K - King, Q - Queen, P - Pawn.'
 
         print('\nLowercase is player 1, uppercase is player 2, player 1 goes first.')
@@ -53,6 +57,10 @@ class Chess():
         print()
 
     def print_moves(self):
+        """
+        Prints out all moves made by both players so far. Moves are printed out in order, side by side.
+        Takes no arguments. 
+        """
         
         if len(self.moves) > 0:
             print("Moves played:", end="\n\n")
@@ -83,7 +91,18 @@ class Chess():
             print("No moves played so far.", end="\n\n")
 
     def move_piece(self, current_cord: str, move_coord: str, player_number: int):
-        
+        """
+        Moves the chess piece on the board
+
+        ## Arguments
+        current_cord -> The coordinate of the piece to be moved.\n
+        move_coord -> The coordinate to move the selected piece too.\n
+        player_number -> Either 1 or 2, representing player 1 or player 2\n
+
+        ## Return
+        Returns a boolean value depending on whether the peice was successfully moved
+        i.e. the move was selected was invalid so false will be returned.
+        """
         if current_cord == "castle":
             # Error checking
             if move_coord.lower() != 'k' and move_coord.lower() != 'q':
@@ -125,7 +144,7 @@ class Chess():
             if not move_ctrl.check_valid_move(current_cord, move_coord, player_number, self.board):
                 return False
             if not move_ctrl.check_pin(current_cord, move_coord, player_number, self.board):
-                print(bcolours.FAIL + "Cannot move a pinned piece" + bcolours.ENDC)
+                print(bcolours.FAIL + "Cannot move a pinned piece." + bcolours.ENDC)
                 return False
         
         # Move piece
@@ -145,6 +164,9 @@ class Chess():
         return True
 
     def play(self):
+        """
+        The method which runs the game of chess. Invoke to start a game.
+        """
         # Message to terminal
         self.print_control_guide()
 

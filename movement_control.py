@@ -4,6 +4,9 @@ import numpy as np
 
 
 def check_valid_coords(coord: str):
+    """
+    Checks whether the entered co-ordinates are valid for a chesss board.
+    """
     coord = coord.upper()
 
     if len(coord) != 2:
@@ -18,7 +21,19 @@ def check_valid_coords(coord: str):
     return True
 
 def check_valid_move(current_coord: str, move_coord: str, player_number: int, board: iter):
+    """
+    Determines whether a regular move (not castling) is valid. An invalid move can be due to
+    piece movement restrictions or a blocked path.
 
+    ## Arguments
+    current_cord -> The coordinate of the piece to be moved.\n
+    move_coord -> The coordinate to move the selected piece too.\n
+    player_number -> Either 1 or 2, representing player 1 or player 2\n
+    board -> A copy of the board being played on.\n
+
+    ## Returns
+    A boolean value, TRUE if move is valid else FALSE.
+    """
     current_row, current_col = convert.grid_coord_to_index(current_coord)
     move_row, move_col = convert.grid_coord_to_index(move_coord)
 
@@ -60,7 +75,20 @@ def check_valid_move(current_coord: str, move_coord: str, player_number: int, bo
     return True
 
 def check_valid_square(current_num: int, move_num: int, piece_type: str, target_square: str, player_num: int):
-    
+    """
+    Function is used in check_valid_move. This function determines if the selected square to move to
+    fits the movement contraints of the selected piece.
+
+    ## Arguments
+    current_num -> The number co-ordinate conversion of the string (i.e. A1 -> 11).\n
+    move_num -> The number co-ordinate of the intended move square\n
+    piece_type -> The piece type to be moved i.e. k == king\n
+    target_square -> The occupants of the intended move square\n
+    player_number -> A 1 or 2 representing which players piece is being moved.\n
+
+    ## Returns
+    A boolean value, TRUE if valid else FALSE.
+    """
     # Possible movements
     diagonals = [9, 11]
     lateral = [1, 2, 3, 4, 5, 6, 7, 10]
@@ -87,7 +115,19 @@ def check_valid_square(current_num: int, move_num: int, piece_type: str, target_
     return True
 
 def valid_pawn_move(current_num: int, move_num: int, target_square: str, player_num: int):
-    
+    """
+    Checks if a pawns movement is valid
+
+    ## Arguments
+    current_num -> The number co-ordinate conversion of the string (i.e. A1 -> 11).\n
+    move_num -> The number co-ordinate of the intended move square\n
+    piece_type -> The piece type to be moved i.e. k == king\n
+    target_square -> The occupants of the intended move square\n
+    player_number -> A 1 or 2 representing which players piece is being moved.\n
+
+    ## Returns
+    A boolean value if the pawn move is valid (TRUE) or not (FALSE).
+    """
     # Possible movements
     pawn = [10]
     pawn_start = [10, 20]
@@ -113,7 +153,18 @@ def valid_pawn_move(current_num: int, move_num: int, target_square: str, player_
     return True
 
 def check_valid_movement(current_coord: str, move_coord: str, player_number: int, board: iter):
-    
+    """
+    Checks if the path of piece is valid i.e. it is not blocked.
+
+    ## Arguments
+    current_cord -> The coordinate of the piece to be moved.\n
+    move_coord -> The coordinate to move the selected piece too.\n
+    player_number -> Either 1 or 2, representing player 1 or player 2\n
+    board -> The current board being played on.\n
+
+    # Returns
+    A boolean value if the pawn move is valid (TRUE) or not (FALSE).
+    """
     current_num = convert.grid_coord_to_num_coord(current_coord)
     move_num = convert.grid_coord_to_num_coord(move_coord)
     square_difference = current_num - move_num
@@ -138,7 +189,7 @@ def check_valid_movement(current_coord: str, move_coord: str, player_number: int
             
             current_num -= lowest_divisor
     elif piece_type != 'N':
-        lowest_divisor = 1 if square_difference > -8 else min([d for d in divisors if square_difference % d == 0])
+        lowest_divisor = -1 if square_difference > -8 else min([d for d in divisors if square_difference % d == 0])
         current_num += lowest_divisor
 
         while current_num < move_num:
@@ -299,6 +350,18 @@ def set_check_lines(board: iter, piece_row: int, piece_col: int):
     return board
 
 def check_pin(current_coord: str, move_coord: str, player_number: int, board: iter):
+    """
+    Determines whether a piece is currently pinned or not
+
+    ## Arguments
+    current_cord -> The coordinate of the piece to be moved.\n
+    move_coord -> The coordinate to move the selected piece too.\n
+    player_number -> Either 1 or 2, representing player 1 or player 2\n
+    board -> The current board being played on.\n
+
+    ## Returns
+    A boolean value if the piece is pinned (TRUE) or not (FALSE).
+    """
     curr_row, curr_col = convert.grid_coord_to_index(current_coord)
     move_row, move_col = convert.grid_coord_to_index(move_coord)
     board_copy = np.copy(board)
