@@ -191,7 +191,7 @@ class Chess():
                     continue
 
                 if current_coord == "print":
-                    print(self.board)
+                    print(f"\n{self.board}\n")
                     continue
 
                 if current_coord == "castle":
